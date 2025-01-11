@@ -1,0 +1,2 @@
+class SearchStatistic < ApplicationRecord
+end
