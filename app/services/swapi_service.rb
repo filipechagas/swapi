@@ -17,7 +17,13 @@ class SwapiService
     )
 
     response.parsed_response
+  rescue Socket::ResolutionError => e
+    Rails.logger.error(e)
+
+    { error: "SWAPI appears to be unaccessible at the moment. Please try again later." }
   rescue => e
+    Rails.logger.error(e)
+
     { error: e.message }
   end
 
