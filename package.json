@@ -2,7 +2,8 @@
   "name": "app",
   "private": true,
   "scripts": {
-    "build": "esbuild app/javascript/entrypoints/*.* --bundle --sourcemap --outdir=app/assets/builds --loader:.js=jsx --loader:.jsx=jsx --public-path=/assets"
+    "build": "esbuild app/javascript/entrypoints/*.* --bundle --sourcemap --outdir=app/assets/builds --loader:.js=jsx --loader:.jsx=jsx --public-path=/assets",
+    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.tailwind.css --minify"
   },
   "dependencies": {
     "@babel/preset-env": "^7.26.0",
@@ -10,8 +11,13 @@
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo": "^8.0.12",
     "@hotwired/turbo-rails": "^8.0.12",
+    "autoprefixer": "^10.4.20",
     "esbuild": "^0.24.2",
+    "install": "^0.13.0",
+    "lucide-react": "^0.471.0",
+    "postcss": "^8.4.49",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^3.4.17"
   }
 }
