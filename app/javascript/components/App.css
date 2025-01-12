@@ -1,0 +1,19 @@
+.app {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.app-header {
+  color: #4caf50;
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 30px;
+  height: 50px;
+  line-height: 50px;
+}
+
+.app-content {
+  display: grid;
+  grid-template-columns: 410px 230px;
+  gap: 30px;
+}

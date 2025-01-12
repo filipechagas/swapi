@@ -1,0 +1,21 @@
+.results-container {
+  width: 230px;
+  background: white;
+}
+
+.results-heading {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.results-empty {
+  text-align: center;
+  color: #666;
+}
+
+.results-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { SearchForm } from "./SearchForm";
 import { Results } from "./Results";
+import "./App.css";
 
 const App = () => {
   const [searchType, setSearchType] = useState("people");
@@ -11,7 +12,6 @@ const App = () => {
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
-
     setLoading(true);
     setError(null);
 
@@ -28,9 +28,7 @@ const App = () => {
           },
         }),
       });
-
       const data = await response.json();
-
       if (data.error) {
         setError(data.error);
         setResults([]);
@@ -46,10 +44,9 @@ const App = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="text-green-500 font-bold text-xl mb-6">SWStarter</div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="app">
+      <div className="app-header">SWStarter</div>
+      <div className="app-content">
         <SearchForm
           searchType={searchType}
           onSearchTypeChange={setSearchType}

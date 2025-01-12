@@ -1,6 +1,7 @@
 import React from "react";
 import { SearchType } from "./SearchType";
 import { SearchInput } from "./SearchInput";
+import "./styles.css";
 
 export const SearchForm = ({
   searchType,
@@ -10,8 +11,8 @@ export const SearchForm = ({
   onSearch,
   loading,
 }) => (
-  <div className="bg-white p-6 rounded-lg shadow">
-    <h2 className="text-lg mb-4">What are you searching for?</h2>
+  <div className="search-form-container">
+    <h2 className="search-form-heading">What are you searching for?</h2>
     <SearchType selected={searchType} onChange={onSearchTypeChange} />
     <SearchInput
       value={searchQuery}
