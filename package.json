@@ -12,7 +12,6 @@
     "@hotwired/turbo-rails": "^8.0.12",
     "esbuild": "^0.24.2",
     "install": "^0.13.0",
-    "lucide-react": "^0.471.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }

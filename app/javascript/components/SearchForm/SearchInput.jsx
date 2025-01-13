@@ -22,8 +22,12 @@ export const SearchInput = ({
         onChange={(e) => onChange(e.target.value)}
         className="search-input"
       />
-      <button onClick={onSearch} disabled={disabled} className="search-button">
-        {disabled ? <div className="loader"></div> : "SEARCH"}
+      <button
+        onClick={onSearch}
+        disabled={disabled}
+        className="action-button search-button"
+      >
+        {disabled ? <div className="loader">SEARCHNG...</div> : "SEARCH"}
       </button>
     </div>
   );

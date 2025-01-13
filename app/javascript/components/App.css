@@ -1,19 +1,95 @@
+:root {
+  --gainsboro: #dadada;
+  --green-teal: #0ab463;
+  --gray-background: #ededed;
+  --warm-grey-75: #848484bf;
+  --gainsboro: #dadada;
+  --pinkish-grey: #c4c4c4;
+  --azure: #0094ff;
+}
+
+body {
+  background-color: #ededed;
+  background-color: --gray-background;
+
+  font-family:
+    Montserrat Arial,
+    sans-serif;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  font-size: 14px;
+}
+
 .app {
-  max-width: 1440px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-header {
-  color: #4caf50;
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 30px;
   height: 50px;
-  line-height: 50px;
+  margin: 0 0 30px;
+  width: 100%;
+  box-shadow: 0 2px 0 0 var(--gainsboro);
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--green-teal);
 }
 
 .app-content {
   display: grid;
-  grid-template-columns: 410px 230px;
+  margin: 0 120px;
+  grid-template-columns: 1fr 1.5fr;
   gap: 30px;
+  justify-content: right;
+}
+
+.app-content > div {
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 0 var(--warm-grey-75);
+  border: solid 1px var(--gainsboro);
+  background-color: #fff;
+  padding: 30px;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    height: 50px;
+    margin: 0;
+  }
+
+  .app-content {
+    max-width: 100%;
+    grid-template-columns: 1fr;
+    margin: 0;
+    gap: 0;
+  }
+}
+
+.action-button {
+  padding: 8px 20px;
+  border-radius: 17px;
+  background-color: var(--green-teal);
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

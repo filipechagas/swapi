@@ -45,7 +45,9 @@ const App = () => {
 
   return (
     <div className="app">
-      <div className="app-header">SWStarter</div>
+      <div className="app-header">
+        <h1>SWStarter</h1>
+      </div>
       <div className="app-content">
         <SearchForm
           searchType={searchType}
