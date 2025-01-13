@@ -25,7 +25,7 @@ module Api
         SwapiService.search(
           search_params[:type],
           search_params[:query],
-          search_params[:fetch_next]
+          search_params[:page]
         )
       end
 
@@ -40,7 +40,7 @@ module Api
       end
 
       def search_params
-        @search_params ||= params.require(:search).permit(:query, :type, :fetch_next)
+        @search_params ||= params.require(:search).permit(:query, :type, :page)
       end
 
       def parameter_missing(exception)
