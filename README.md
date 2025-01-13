@@ -2,6 +2,18 @@
 
 This application uses Rails 8 with React frontend, running in a Docker development environment. This guide will help you get started with development and testing.
 
+## Architecture
+
+Rails 8
+Embedded React rendering
+Building with Esbuild
+SQLite for API caching and background job processing
+
+### Why SQLlite, may you ask?
+
+- It's lightweight and doesn't require DB installation, which meets the purpose of this project.
+- [ It can sometimes be faster than Redis. ](https://wafris.org/blog/rearchitecting-for-sqlite)
+
 ## Prerequisites
 
 - Docker Desktop (latest version)
@@ -41,13 +53,13 @@ To run commands in the Docker environment, prefix them with `docker compose run 
 
 # Access Rails console
 
+```bash
 docker compose run --rm web rails console
-
-````
-
-### Database Operations
+```
 
 ```bash
+### Database Operations
+
 # Create database
 docker compose run --rm web rails db:create
 
@@ -56,7 +68,7 @@ docker compose run --rm web rails db:migrate
 
 # Seed database
 docker compose run --rm web rails db:seed
-````
+```
 
 ## Testing
 
