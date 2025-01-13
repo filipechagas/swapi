@@ -21,7 +21,8 @@ export const SearchForm = ({
         value={searchQuery}
         onChange={onSearchQueryChange}
         onSearch={onSearch}
-        disabled={loading}
+        disabled={searchQuery === ""}
+        loading={loading}
         searchType={searchType}
         popularSearches={popularSearches}
         isLoadingPopular={isLoadingPopular}

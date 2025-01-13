@@ -5,6 +5,7 @@ export const SearchInput = ({
   onChange,
   onSearch,
   disabled,
+  loading,
   searchType,
   popularSearches,
   isLoadingPopular,
@@ -33,7 +34,7 @@ export const SearchInput = ({
         disabled={disabled}
         className="action-button search-button"
       >
-        {disabled ? <div className="loader">SEARCHING...</div> : "SEARCH"}
+        {loading ? <div className="loader">SEARCHING...</div> : "SEARCH"}
       </button>
     </div>
   );

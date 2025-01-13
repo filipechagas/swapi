@@ -39,6 +39,8 @@ export const useStarWarsSearch = () => {
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
+    if (loading) return;
+
     setLoading(true);
     setError(null);
 
