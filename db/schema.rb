@@ -10,12 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_11_172943) do
-  create_table "search_statistics", force: :cascade do |t|
-    t.string "query"
+ActiveRecord::Schema[8.0].define(version: 2025_01_13_213143) do
+  create_table "searches", force: :cascade do |t|
     t.string "search_type"
+    t.string "query"
+    t.integer "page"
+    t.json "results"
     t.float "response_time"
+    t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "hits", default: 1
   end
 end
