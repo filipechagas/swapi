@@ -1,44 +1,90 @@
 class SwapiService
+  class InvalidSearchType < StandardError; end
+
   include HTTParty
-  base_uri "https://swapi.py4e.com/api"
 
-  def self.search(type, query)
-    start_time = Time.current
+  BASE_URI = "https://swapi.py4e.com/api"
+  VALID_TYPES = %w[people films].freeze
 
-    response = fetch_results(type, query)
+  base_uri BASE_URI
 
-    end_time = Time.current
-    response_time = (end_time - start_time) * 1000
+  class << self
+    def search(type, query, page = nil)
+      validate_search_type!(type)
 
-    StoreSearchStatisticJob.perform_later(
-      query: query,
-      search_type: type,
-      response_time: response_time
-    )
+      start_time = Time.current
+      response = fetch_results(type, query, page)
+      track_search_metrics(query, type, start_time)
 
-    response.parsed_response
-  rescue Socket::ResolutionError => e
-    Rails.logger.error(e)
-
-    { error: "SWAPI appears to be unaccessible at the moment. Please try again later." }
-  rescue => e
-    Rails.logger.error(e)
-
-    { error: e.message }
-  end
-
-  private
-
-  def self.fetch_results(type, query)
-    response = case type
-    when "people"
-      get("/people/?search=#{query}")
-    when "films"
-      get("/films/?search=#{query}")
-    else
-      raise ArgumentError, "Invalid search type: #{type}"
+      process_response(response)
+    rescue *NETWORK_ERRORS => e
+      handle_network_error(e)
+    rescue StandardError => e
+      handle_generic_error(e)
     end
 
-    response
+    private
+
+    NETWORK_ERRORS = [
+      Socket::ResolutionError,
+      SocketError,
+      Timeout::Error,
+      Errno::ECONNREFUSED
+    ].freeze
+
+    def validate_search_type!(type)
+      return if VALID_TYPES.include?(type)
+
+      raise InvalidSearchType, "Invalid search type: #{type}. Valid types are: #{VALID_TYPES.join(', ')}"
+    end
+
+    def fetch_results(type, query, page)
+      endpoint = build_endpoint(type, query, page)
+      get(endpoint)
+    end
+
+    def build_endpoint(type, query, page)
+      endpoint = "/#{type}/?search=#{URI.encode_www_form_component(query)}"
+      endpoint += "&page=#{page}" if page
+      endpoint
+    end
+
+    def process_response(response)
+      return unless response&.parsed_response
+
+      parsed = response.parsed_response
+      parsed["next"] = extract_page_number(parsed["next"])
+      parsed
+    end
+
+    def extract_page_number(next_url)
+      return unless next_url
+
+      page_match = next_url.match(/page=(\d+)/)
+      page_match[1] if page_match
+    end
+
+    def track_search_metrics(query, type, start_time)
+      response_time = calculate_response_time(start_time)
+      StoreSearchStatisticJob.perform_later(
+        query: query,
+        search_type: type,
+        response_time: response_time
+      )
+    end
+
+    def calculate_response_time(start_time)
+      ((Time.current - start_time) * 1000).round(2)
+    end
+
+    def handle_network_error(error)
+      Rails.logger.error(error) { "SWAPI service is currently unavailable" }
+      { error: "SWAPI appears to be unaccessible at the moment. Please try again later." }
+    end
+
+    def handle_generic_error(error)
+      Rails.logger.error(error) { "Unexpected error occurred while fetching SWAPI data" }
+      { error: error.message }
+    end
   end
 end

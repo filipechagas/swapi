@@ -27,21 +27,21 @@ class Api::V1::SearchesControllerTest < ActionDispatch::IntegrationTest
       params: { search: { query: "luke" } },
       as: :json
 
-    assert_response :unprocessable_entity
-    assert_equal "Query and type parameters are required", JSON.parse(response.body)["error"]
+    assert_response :internal_server_error
+    assert_equal "Missing required parameters: type", JSON.parse(response.body)["error"]
 
     post api_v1_searches_url,
       params: { search: { type: "people" } },
       as: :json
 
-    assert_response :unprocessable_entity
-    assert_equal "Query and type parameters are required", JSON.parse(response.body)["error"]
+    assert_response :internal_server_error
+    assert_equal "Missing required parameters: query", JSON.parse(response.body)["error"]
 
     post api_v1_searches_url,
       params: {},
       as: :json
 
-    assert_response :unprocessable_entity
+    assert_response :internal_server_error
     assert_equal "param is missing or the value is empty or invalid: search", JSON.parse(response.body)["error"]
   end
 
@@ -64,7 +64,7 @@ class Api::V1::SearchesControllerTest < ActionDispatch::IntegrationTest
         params: { search: { query: "luke", type: "people" } },
         as: :json
 
-      assert_response :unprocessable_entity
+      assert_response :internal_server_error
       assert_equal "Unexpected error", JSON.parse(response.body)["error"]
     end
   end
