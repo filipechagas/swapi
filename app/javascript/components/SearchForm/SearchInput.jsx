@@ -6,11 +6,17 @@ export const SearchInput = ({
   onSearch,
   disabled,
   searchType,
+  popularSearches,
+  isLoadingPopular,
 }) => {
   const getPlaceholder = () => {
+    if (isLoadingPopular) {
+      return "Loading popular searches...";
+    }
+
     return searchType === "people"
-      ? "e.g. Chewbacca, Yoda, Boba Fett"
-      : "e.g. A New Hope, Empire Strikes Back";
+      ? `e.g. ${popularSearches.people}`
+      : `e.g. ${popularSearches.movies}`;
   };
 
   return (
@@ -27,7 +33,7 @@ export const SearchInput = ({
         disabled={disabled}
         className="action-button search-button"
       >
-        {disabled ? <div className="loader">SEARCHNG...</div> : "SEARCH"}
+        {disabled ? <div className="loader">SEARCHING...</div> : "SEARCH"}
       </button>
     </div>
   );

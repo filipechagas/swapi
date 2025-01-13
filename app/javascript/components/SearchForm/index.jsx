@@ -10,16 +10,22 @@ export const SearchForm = ({
   onSearchQueryChange,
   onSearch,
   loading,
-}) => (
-  <div className="search-form-container">
-    <h2 className="search-form-heading">What are you searching for?</h2>
-    <SearchType selected={searchType} onChange={onSearchTypeChange} />
-    <SearchInput
-      value={searchQuery}
-      onChange={onSearchQueryChange}
-      onSearch={onSearch}
-      disabled={loading}
-      searchType={searchType}
-    />
-  </div>
-);
+  popularSearches,
+  isLoadingPopular,
+}) => {
+  return (
+    <div className="search-form-container">
+      <h2 className="search-form-heading">What are you searching for?</h2>
+      <SearchType selected={searchType} onChange={onSearchTypeChange} />
+      <SearchInput
+        value={searchQuery}
+        onChange={onSearchQueryChange}
+        onSearch={onSearch}
+        disabled={loading}
+        searchType={searchType}
+        popularSearches={popularSearches}
+        isLoadingPopular={isLoadingPopular}
+      />
+    </div>
+  );
+};

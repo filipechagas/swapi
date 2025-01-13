@@ -16,6 +16,8 @@ const App = () => {
     loading,
     error,
     handleSearch,
+    popularSearches,
+    popularSearchesLoading,
   } = useStarWarsSearch();
 
   return (
@@ -31,6 +33,8 @@ const App = () => {
           onSearchQueryChange={setSearchQuery}
           onSearch={handleSearch}
           loading={loading}
+          popularSearches={popularSearches}
+          isLoadingPopular={popularSearchesLoading}
         />
         <Results results={results} loading={loading} error={error} />
       </div>

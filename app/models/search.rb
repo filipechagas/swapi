@@ -56,7 +56,7 @@ class Search < ApplicationRecord
 
     top_results = TopResultsParser.parse(searches, limit, results_field)
 
-    top_results.presence || "No results found"
+    top_results.presence
   end
 
   def self.average_response_duration
