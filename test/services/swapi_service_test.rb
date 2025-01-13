@@ -45,7 +45,6 @@ class SwapiServiceTest < ActiveSupport::TestCase
       ]
     }
 
-    # Freeze time for consistent response time calculations
     travel_to Time.zone.local(2025, 1, 1, 12, 0, 0)
   end
 
@@ -53,19 +52,37 @@ class SwapiServiceTest < ActiveSupport::TestCase
     travel_back
   end
 
-  test "searches people successfully and extracts next page" do
+  test "searches people successfully and creates cache entry" do
     SwapiService.stub :fetch_results, StubResponse.new(@people_response) do
-      assert_enqueued_jobs 1 do
+      assert_difference "Search.count", 1 do
         response = SwapiService.search("people", @query)
         assert_equal "2", response["next"]
         assert_equal @people_response["results"], response["results"]
+
+        cached_search = Search.last
+        assert_equal "people", cached_search.search_type
+        assert_equal @query, cached_search.query
+        assert_equal @people_response, cached_search.results
+        assert_in_delta 0.0, cached_search.response_time, 0.1
+        assert_equal 24.hours.from_now.to_i, cached_search.expires_at.to_i
+      end
+    end
+  end
+
+  test "ignores expired cached results" do
+    expired_search = searches(:luke_search)
+    expired_search.update!(expires_at: 1.day.ago)
+
+    SwapiService.stub :fetch_results, StubResponse.new(@people_response) do
+      assert_difference "Search.count", 1 do
+        SwapiService.search("people", "luke")
       end
     end
   end
 
   test "searches films successfully with no next page" do
     SwapiService.stub :fetch_results, StubResponse.new(@films_response) do
-      assert_enqueued_jobs 1 do
+      assert_difference "Search.count", 1 do
         response = SwapiService.search("films", "hope")
         assert_nil response["next"]
         assert_equal @films_response["results"], response["results"]
@@ -79,20 +96,6 @@ class SwapiServiceTest < ActiveSupport::TestCase
 
     expected_message = "Invalid search type: #{invalid_type}. Valid types are: people, films"
     assert_equal expected_message, response[:error]
-  end
-
-  test "enqueues job with correct metrics" do
-    expected_response_time = 1000.0 # 1 second in milliseconds
-
-    travel 1.second do
-      SwapiService.stub :fetch_results, StubResponse.new(@people_response) do
-        assert_enqueued_with(
-          job: StoreSearchStatisticJob,
-        ) do
-          SwapiService.search("people", @query)
-        end
-      end
-    end
   end
 
   test "handles network errors gracefully" do
@@ -140,7 +143,7 @@ class SwapiServiceTest < ActiveSupport::TestCase
     empty_response = { "count" => 0, "next" => nil, "results" => [] }
 
     SwapiService.stub :fetch_results, StubResponse.new(empty_response) do
-      assert_enqueued_jobs 1 do
+      assert_difference "Search.count", 1 do
         response = SwapiService.search("people", "nonexistent")
         assert_equal empty_response, response
       end
