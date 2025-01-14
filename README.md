@@ -45,6 +45,8 @@ No other dependencies are required as everything runs inside Docker containers!
 
 3. Access the application at `http://localhost:3000`
 
+4. Access the statistics endpoints at `http://localhost:3000/api/v1/statistics` and `http://localhost:3000/api/v1/statistics/popular_searches_by_type`
+
 ## Development
 
 ### Running Commands
